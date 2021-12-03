@@ -15,7 +15,6 @@ export async function get(req) {
   const accessToken = await getAccessToken(code)
   //  ...to get the user information from Github
   const user = await getUser(accessToken)
-  console.log(user.login);
   // this mutates the locals object on the request
   // and will be read by the hooks/handle function
   // after the resolve
