@@ -8,9 +8,9 @@ const clientId = import.meta.env.VITE_CLIENT_ID
 const secret = import.meta.env.VITE_CLIENT_SECRET
 
 
-export async function get(req) {
+export async function get({ locals, url }) {
   //  ...uses that code query parameter from GitHub...
-  const code = req.query.get('code')
+  const code = url.searchParams.get('code')
   //  ...to get an access_token for the authorized user from GitHub...
   const accessToken = await getAccessToken(code)
   //  ...to get the user information from Github
@@ -18,12 +18,13 @@ export async function get(req) {
   // this mutates the locals object on the request
   // and will be read by the hooks/handle function
   // after the resolve
-  req.locals.user = user.login
+  locals.user = user.login
 
   return {
     status: 302,
     headers: {
-      location: '/'
+      location: '/',
+      'set-cookie': [`user=${user.login || ''}; Path=/; HttpOnly`]
     }
   }
 }
