@@ -7,7 +7,8 @@ export async function get(req) {
   return {
     status: 302,
     headers: {
-      location: '/'
+      location: '/',
+      'set-cookie': `user=; expires=Thu, 18 Dec 2013 12:00:00 UTC; Path=/; HttpOnly`
     }
   }
 }

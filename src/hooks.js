@@ -3,17 +3,17 @@
 import cookie from 'cookie'
 
 //  ...every time a request is received... 
-export async function handle({ request, resolve }) {
-  const cookies = cookie.parse(request.headers.cookie || '')
+export async function handle({ event, resolve }) {
+  const cookies = cookie.parse(event.request.headers.get('cookie') || '')
 
   //  ...any user for the request is defined by the cookie...
-  request.locals.user = cookies.user
+  event.locals.user = cookies.user
 
   //  ...before the endpoint or page is called...
-  const response = await resolve(request)
+  const response = await resolve(event)
 
   //  ...and then the cookie is set or updated...
-  response.headers['set-cookie'] = `user=${request.locals.user || ''}; Path=/; HttpOnly`
+  response.headers['set-cookie'] = `user=${event.locals.user || ''}; Path=/; HttpOnly`
 
   return response
 }
